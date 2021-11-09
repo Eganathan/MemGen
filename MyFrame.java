@@ -8,6 +8,8 @@ public class MyFrame extends JFrame implements ActionListener {
 
     private final JButton addImgBtn;
     private final JPanel centerPanel;
+    private JLabel memIme;
+    private ImageIcon memIco;
 
 
 
@@ -38,11 +40,11 @@ public class MyFrame extends JFrame implements ActionListener {
 
         JPanel colorSwatch = new JPanel();
         colorSwatch.setLayout(new GridLayout(1,3));
-        JButton redBtn = new JButton("R");
+        JButton redBtn = new JButton();
         redBtn.setBackground(Color.RED);
-        JButton blueBtn = new JButton("B");
+        JButton blueBtn = new JButton();
         blueBtn.setBackground(Color.BLUE);
-        JButton greenBtn = new JButton("G");
+        JButton greenBtn = new JButton();
         greenBtn.setBackground(Color.GREEN);
         colorSwatch.add(redBtn);
         colorSwatch.add(blueBtn);
@@ -67,13 +69,20 @@ public class MyFrame extends JFrame implements ActionListener {
         centerPanel = new JPanel();
         centerPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         JLabel eastLbl = new JLabel("CENTER PANEL");
+
+        memIco = new ImageIcon(getClass().getResource("MEMGEN_icon.png"));
+        memIme = new JLabel(memIco);
+        memIme.setSize(centerPanel.getWidth(),centerPanel.getWidth()-100);
+
         centerPanel.add(eastLbl);
+        centerPanel.add(memIme);
+
 
 
 
         //MAIN FRAME SPECIFICATIONS
         mainFrame.setLayout(new BorderLayout(20,15)); //Frame
-        mainFrame.setSize(700,500);
+        mainFrame.setBounds(100,100,700,500);
         mainFrame.setResizable(true);
 
         //ADDING PANELS
