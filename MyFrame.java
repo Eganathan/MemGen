@@ -19,6 +19,8 @@ public class MyFrame extends JFrame implements ActionListener {
     private JButton fontRedBtn;
     private  JButton fontBlueBtn;
     private  JButton fontGreenBtn;
+    private  JButton fontCyanBtn;
+    private JButton saveImgBtn;
 
 
 
@@ -40,38 +42,60 @@ public class MyFrame extends JFrame implements ActionListener {
         JLabel footerLbl = new JLabel("FOOTER LABEL");
         btmPanel.add(footerLbl);
         mainFrame.add(btmPanel);
+
         //WEST- EDIT SIDE BAR
         JPanel westPanel = new JPanel(); //The West EDit panel
         westPanel.setBackground(Color.BLACK);
         westPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); //Empty margin for margin
         westPanel.setLayout(new GridLayout(10,1,2,2)); //layount rows and columns
-        JLabel westLbl = new JLabel("Editing PANEL"); //label to identify panel
-        JLabel btndesLbl = new JLabel("Add an image");
-        JLabel inputdesLbl = new JLabel("Text color");
-        //FONT SWATCH
-        JPanel colorSwatch = new JPanel();
-        colorSwatch.setLayout(new GridLayout(1,3));
-        fontRedBtn = new JButton();
-        fontRedBtn.setBackground(Color.RED);
-        fontBlueBtn = new JButton();
-        fontBlueBtn.setBackground(Color.BLUE);
-        fontGreenBtn = new JButton();
-        fontGreenBtn.setBackground(Color.GREEN);
-        colorSwatch.add(fontRedBtn);
-        colorSwatch.add(fontBlueBtn);
-        colorSwatch.add(fontGreenBtn);
+        JLabel westLbl = new JLabel("Editing panel"); //label to identify panel
+        westLbl.setFont(new Font("Serif", Font.BOLD, 20));
+        westLbl.setForeground(Color.WHITE);
+        JLabel btndesLbl = new JLabel("Add your image");
+        btndesLbl.setForeground(Color.MAGENTA);
+        JLabel fontColordesLbl = new JLabel("Font color");
+        fontColordesLbl.setForeground(Color.MAGENTA);
+        JLabel inputdesLbl = new JLabel("Custom Text");
+        inputdesLbl.setForeground(Color.MAGENTA);
+            //FONT SWATCH PANEL
+            JPanel colorSwatch = new JPanel();
+            colorSwatch.setLayout(new GridLayout(1,5));
+                //RED FONT BTN
+                fontRedBtn = new JButton();
+                fontRedBtn.setBackground(Color.RED);
+                fontRedBtn.addActionListener(this);
+                //Blue Font Btn
+                fontBlueBtn = new JButton();
+                fontBlueBtn.setBackground(Color.BLUE);
+                fontBlueBtn.addActionListener(this);
+                //Green Font Btn
+                fontGreenBtn = new JButton();
+                fontGreenBtn.setBackground(Color.GREEN);
+                fontGreenBtn.addActionListener(this);
+                //CYAN Font Btn
+                fontCyanBtn = new JButton();
+                fontCyanBtn.setBackground(Color.CYAN);
+                fontCyanBtn.addActionListener(this);
+                //Adding Buttons to the FONT Swatch Panel
+                colorSwatch.add(fontRedBtn);
+                colorSwatch.add(fontBlueBtn);
+                colorSwatch.add(fontGreenBtn);
+                colorSwatch.add(fontCyanBtn);
 
         addImgBtn = new JButton("SELECT IMAGE"); //Button to upload user image
         addImgBtn.addActionListener(this);// adds the object name to the action listener so a file choose pops up
-        JButton saveImgBtn = new JButton("SAVE IMAGE"); //Button to upload user image
+        saveImgBtn = new JButton("SAVE IMAGE"); //Button to upload user image
+        saveImgBtn.addActionListener(this);
         userInput = new JTextField(1); //setting max column
         userInput.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        //westPanel.add(westLbl);// adding the identification label
+        //Adding Labels and other components to Editing Panel
+        westPanel.add(westLbl);
         westPanel.add(btndesLbl);
         westPanel.add(addImgBtn); // adding the button to
-        westPanel.add(inputdesLbl);
+        westPanel.add(fontColordesLbl);
         westPanel.add(colorSwatch);
+        westPanel.add(inputdesLbl);
         westPanel.add(userInput);
         westPanel.add(saveImgBtn);
         //END OF EDIT PANEL
@@ -81,8 +105,11 @@ public class MyFrame extends JFrame implements ActionListener {
         centerPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         centerPanel.setBackground(Color.BLACK);
         userInputLbl = new JLabel("Aren't you typing anything ?");
+        userInputLbl.setHorizontalTextPosition(SwingConstants.CENTER);
+        userInputLbl.setHorizontalTextPosition(SwingConstants.CENTER);
         userInputLbl.setFont(new Font("Serif", Font.PLAIN, 40));
         userInputLbl.setForeground(Color.CYAN);
+
 
 
         memIme = new JLabel(memIco);
@@ -134,15 +161,34 @@ public class MyFrame extends JFrame implements ActionListener {
             centerPanel.updateUI();
 
         }else if(e.getSource() == fontBlueBtn){
-
             userInputLbl.setForeground(Color.BLUE);
-            userInputLbl.repaint();
-            userInputLbl.setBackground(Color.RED);
+            userInputLbl.setText(userInput.getText());
             centerPanel.updateUI();
-            System.out.println("wrong!!");
+
+        }else if(e.getSource() == fontRedBtn){
+            userInputLbl.setForeground(Color.RED);
+            userInputLbl.setText(userInput.getText());
+            centerPanel.updateUI();
+
+        }else if(e.getSource() == fontGreenBtn){
+            userInputLbl.setForeground(Color.GREEN);
+            userInputLbl.setText(userInput.getText());
+            centerPanel.updateUI();
+
+        }else if(e.getSource() == fontCyanBtn){
+            userInputLbl.setForeground(Color.CYAN);
+            userInputLbl.setText(userInput.getText());
+            centerPanel.updateUI();
+
+        }else if(e.getSource() == saveImgBtn){
+            userInputLbl.setText(userInput.getText());
+            centerPanel.updateUI();
+
         }
         else{
             System.out.println("NIl wrong!!");
+            userInputLbl.setText(userInput.getText());
+            centerPanel.updateUI();
         }
     }
 }
