@@ -1,0 +1,69 @@
+import javax.swing.*;
+import java.awt.*;
+import java.net.URL;
+
+class MyFrame extends JFrame {
+
+    String title = "MEME-GEN V.00";
+    URL logopath = getClass().getResource("MEMGEN_icon.png");
+
+    public MyFrame(){
+
+        JFrame mainFrame = new JFrame();
+        mainFrame.setTitle(title);
+        mainFrame.setSize(1200,500);
+
+
+        //TOP PANEL
+        JPanel tPanel = new JPanel();
+        tPanel.setBackground(Color.BLACK);
+        ImageIcon logo = new ImageIcon(logopath);
+        JLabel tLogo = new JLabel(logo);
+        tPanel.add(tLogo);
+
+        //EDIT PANEL
+        JPanel editPanel = new JPanel();
+        JLabel editTitle = new JLabel("EDIT PANEL");
+        editPanel.add(editTitle);
+        //**LABELS
+        JLabel textInputLbl = new JLabel("Your text");
+        JLabel addImageLbl = new JLabel("Add Image");
+        JLabel fontColorLbl = new JLabel("Font color");
+        JLabel bgColorLbl = new JLabel("background color");
+        JLabel saverLbl = new JLabel("Save File");
+
+        //**Inputs and Buttons
+        JButton addImage = new JButton("Load image");
+        JButton saveImage = new JButton("Save image");
+        JTextField customInput = new JTextField();
+        JColorChooser fontColor = new JColorChooser();
+        JColorChooser bgColor = new JColorChooser();
+
+
+        //**ADDING EDIT LABEL,Buttons,Entry's TO EDIT PANEL
+        editPanel.add(textInputLbl);//LBL input
+        editPanel.add(customInput);//INP label
+        editPanel.add(addImageLbl);// LBL add Image
+        editPanel.add(addImage);// BTN add Image
+        editPanel.add(fontColorLbl); //LBL font color label
+        editPanel.add(fontColor); //
+        editPanel.add(bgColorLbl); //LBL
+        editPanel.add(bgColor);
+        editPanel.add(saverLbl);//LBL
+        editPanel.add(saveImage);
+
+        editPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        editPanel.setLayout(new GridLayout(12,1));
+
+
+
+        //ADD PANELS TO MAIN FRAME
+        mainFrame.add(tPanel,BorderLayout.NORTH);
+        mainFrame.add(editPanel,BorderLayout.WEST);
+
+        mainFrame.setLocationRelativeTo(null);
+        mainFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        mainFrame.setVisible(true);
+    }
+
+}
