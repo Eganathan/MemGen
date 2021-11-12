@@ -1,8 +1,12 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 
 public class MyFrame extends JFrame implements ActionListener {
@@ -10,27 +14,42 @@ public class MyFrame extends JFrame implements ActionListener {
     private final JButton addImgBtn; //Image ADD Button
     private final JPanel centerPanel; //Center Panel
     private JLabel memIme; //JLabel Center Image
-    private ImageIcon memIco;//Image icon
-    private String userFile; //File details
-    private JLabel userInputLbl; //Meme Text label
-    private JTextField userInput;//User Input field
+    private ImageIcon memIco;//Image icon //the Meme Image
+    private String userFile; //custom File path details from the user to load the image
+    private JLabel userInputLbl; //Meme Text label that shows user input into the JPanel
+    private JTextField userInput;//User Input field declaration
+    private int  counter = 1; //Counter for
 
     //Swatch BUTTONS
-    private JButton fontRedBtn;
-    private  JButton fontBlueBtn;
-    private  JButton fontGreenBtn;
-    private  JButton fontCyanBtn;
-    private JButton saveImgBtn;
+    private JButton fontRedBtn; //Red Btn
+    private  JButton fontBlueBtn; //Blue Btn
+    private  JButton fontGreenBtn;//Green Btn
+    private  JButton fontCyanBtn;//Cyan Btn
+
+    //Save Button
+    private JButton saveImgBtn;//Saves the Image and other function on btn click event
+
+
+
+    /***
+     *
+     * BufferedImage image = new BufferedImage(d.width, d.height, BufferedImage.TYPE_INT_RGB);
+     * Graphics2D g2d = image.createGraphics();
+     * component.print( g2d );
+     * g2d.dispose();
+     * ImageIO.write(image, ".jpg", new File(...));
+     */
 
 
 
     public MyFrame(){
         //MAIN FRAME
-        JFrame mainFrame = new JFrame("MEME-Gen V0.01");
+        JFrame mainFrame = new JFrame("MEME-Gen V0.01"); //Title of the Main Frame
+        mainFrame.setBackground(Color.CYAN); //setting the background
 
 
         //Top Pane or NORTH PANE
-        JPanel topPanel = new JPanel();
+        JPanel topPanel = new JPanel();//top panel or LoGO panel
         ImageIcon imLogo = new ImageIcon(getClass().getResource("MEMGEN_icon.png")); //icon with the image
         JLabel logoLbl = new JLabel(imLogo); //Label for the icon
         topPanel.add(logoLbl);//adding the label to the Top panel
@@ -38,26 +57,36 @@ public class MyFrame extends JFrame implements ActionListener {
         mainFrame.add(topPanel);// Adding top panel to Main Frame
 
         //BTM Pane or NORTH PANE
-        JPanel btmPanel = new JPanel();
-        JLabel footerLbl = new JLabel("FOOTER LABEL");
-        btmPanel.add(footerLbl);
-        mainFrame.add(btmPanel);
+        JPanel btmPanel = new JPanel();//footer panel on the bottom of the Main frame
+        JLabel footerLbl = new JLabel("FOOTER LABEL"); //Identification of the Frame
+        btmPanel.add(footerLbl); //adding the lbl to the pane
+        mainFrame.add(btmPanel);//adding the pane to the main frame
 
         //WEST- EDIT SIDE BAR
         JPanel westPanel = new JPanel(); //The West EDit panel
-        westPanel.setBackground(Color.BLACK);
-        westPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); //Empty margin for margin
-        westPanel.setLayout(new GridLayout(10,1,2,2)); //layount rows and columns
+        westPanel.setBackground(Color.BLACK);//seting the Background of the editing panel
+        westPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); //Empty border for margin
+        westPanel.setLayout(new GridLayout(10,1,2,2)); //grid layout for a better view
+
+        //Editing Panel Identification Label
         JLabel westLbl = new JLabel("Editing panel"); //label to identify panel
+        westLbl.setHorizontalTextPosition(SwingConstants.CENTER);
         westLbl.setFont(new Font("Serif", Font.BOLD, 20));
         westLbl.setForeground(Color.WHITE);
+
         JLabel btndesLbl = new JLabel("Add your image");
         btndesLbl.setForeground(Color.MAGENTA);
+
         JLabel fontColordesLbl = new JLabel("Font color");
         fontColordesLbl.setForeground(Color.MAGENTA);
+
         JLabel inputdesLbl = new JLabel("Custom Text");
         inputdesLbl.setForeground(Color.MAGENTA);
-            //FONT SWATCH PANEL
+
+        JLabel savedesLbl = new JLabel("Save Your Image ");
+        savedesLbl.setForeground(Color.MAGENTA);
+
+        //FONT SWATCH PANEL
             JPanel colorSwatch = new JPanel();
             colorSwatch.setLayout(new GridLayout(1,5));
                 //RED FONT BTN
@@ -97,6 +126,7 @@ public class MyFrame extends JFrame implements ActionListener {
         westPanel.add(colorSwatch);
         westPanel.add(inputdesLbl);
         westPanel.add(userInput);
+        westPanel.add(savedesLbl);
         westPanel.add(saveImgBtn);
         //END OF EDIT PANEL
 
@@ -104,16 +134,16 @@ public class MyFrame extends JFrame implements ActionListener {
         centerPanel = new JPanel();
         centerPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         centerPanel.setBackground(Color.BLACK);
-        userInputLbl = new JLabel("Aren't you typing anything ?");
-        userInputLbl.setHorizontalTextPosition(SwingConstants.CENTER);
-        userInputLbl.setHorizontalTextPosition(SwingConstants.CENTER);
+        userInputLbl = new JLabel();
+        userInputLbl.setHorizontalAlignment(SwingConstants.CENTER);
         userInputLbl.setFont(new Font("Serif", Font.PLAIN, 40));
+        userInputLbl.setBackground(Color.BLACK);
         userInputLbl.setForeground(Color.CYAN);
 
 
 
         memIme = new JLabel(memIco);
-        memIme.setSize(centerPanel.getWidth(),centerPanel.getWidth()-100);
+        memIme.setSize(centerPanel.getWidth(),centerPanel.getHeight());
 
         centerPanel.setLayout(new BorderLayout());
         centerPanel.add(userInputLbl,BorderLayout.SOUTH);
@@ -123,15 +153,15 @@ public class MyFrame extends JFrame implements ActionListener {
 
 
         //MAIN FRAME SPECIFICATIONS
-        mainFrame.setLayout(new BorderLayout(20,15)); //Frame
-        mainFrame.setBounds(100,100,700,500);
+        mainFrame.setLayout(new BorderLayout(10,10)); //Frame
+        mainFrame.setBounds(20,20,1300,700);
         mainFrame.setResizable(true);
 
         //ADDING PANELS
         mainFrame.add(topPanel, BorderLayout.NORTH);//TOP PANEL BORDER LAYOUT NORTH
-        mainFrame.add(btmPanel, BorderLayout.SOUTH);//BOTEM PANEL BORDER LAYOUT NORTH
-        mainFrame.add(westPanel, BorderLayout.WEST);//WEST PANEL BORDER LAYOUT NORTH
-        mainFrame.add(centerPanel, BorderLayout.CENTER);//CENTER PANEL BORDER LAYOUT NORTH
+        mainFrame.add(btmPanel, BorderLayout.SOUTH);//BOTTOM PANEL BORDER LAYOUT SOUTH
+        mainFrame.add(westPanel, BorderLayout.WEST);//WEST PANEL BORDER LAYOUT WEST
+        mainFrame.add(centerPanel, BorderLayout.CENTER);//CENTER PANEL BORDER LAYOUT CENTER
 
 
         mainFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -181,14 +211,40 @@ public class MyFrame extends JFrame implements ActionListener {
             centerPanel.updateUI();
 
         }else if(e.getSource() == saveImgBtn){
+            /***
+                int center = userInputLbl.getWidth()/2;
+                int charC = userInput.getText().length()/2;
+                int space = center-charC;
+                String text = userInput.getText();
+                for (int x = space; x >=1 ;x--){
+                    String y = " "+text;
+                    text = y;
+                    System.out.println(y);
+                }
+                    ***/
+
             userInputLbl.setText(userInput.getText());
+            userInputLbl.setOpaque(true);
             centerPanel.updateUI();
 
+            Dimension d = centerPanel.getSize();
+            BufferedImage image = new BufferedImage(d.width, d.height, BufferedImage.TYPE_INT_RGB);
+            Graphics2D g2d = image.createGraphics();
+            centerPanel.print( g2d );
+            g2d.dispose();
+            String fileNameGen = "MyMem_00"+String.valueOf(counter)+".jpg";
+
+            File f = new File(fileNameGen);
+            try {
+                ImageIO.write(image, "JPEG", f);
+                counter++;
+                JOptionPane.showMessageDialog(null, " Image saved succesfully! ");
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            System.out.println(".");
+
+
         }
-        else{
-            System.out.println("NIl wrong!!");
-            userInputLbl.setText(userInput.getText());
-            centerPanel.updateUI();
-        }
-    }
+}
 }
