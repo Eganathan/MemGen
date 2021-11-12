@@ -11,6 +11,17 @@ import java.io.IOException;
 
 public class MyFrame extends JFrame implements ActionListener {
 
+    //Frames
+    private  JFrame mainFrame;
+    private JFrame templateOne;
+
+    private String title = "Ekha- MEMGEN V.0.00.01";
+
+    public ImageIcon imLogo;
+    public JLabel logoLbl ;
+
+    private JButton templateOneBtn;
+
     private final JButton addImgBtn; //Image ADD Button
     private final JPanel centerPanel; //Center Panel
     private JLabel memIme; //JLabel Center Image
@@ -20,14 +31,22 @@ public class MyFrame extends JFrame implements ActionListener {
     private JTextField userInput;//User Input field declaration
     private int  counter = 1; //Counter for
 
-    //Swatch BUTTONS
+    //Font Swatch BUTTONS
     private JButton fontRedBtn; //Red Btn
     private  JButton fontBlueBtn; //Blue Btn
     private  JButton fontGreenBtn;//Green Btn
     private  JButton fontCyanBtn;//Cyan Btn
 
+    //BG Swatch BUTTONS
+    private JButton bgRedBtn; //Red Btn
+    private  JButton bgBlueBtn; //Blue Btn
+    private  JButton bgGreenBtn;//Green Btn
+    private  JButton bgCyanBtn;//Cyan Btn
+
     //Save Button
     private JButton saveImgBtn;//Saves the Image and other function on btn click event
+
+    public Color blk = Color.BLACK;
 
 
 
@@ -44,29 +63,68 @@ public class MyFrame extends JFrame implements ActionListener {
 
     public MyFrame(){
         //MAIN FRAME
-        JFrame mainFrame = new JFrame("MEME-Gen V0.01"); //Title of the Main Frame
-        mainFrame.setBackground(Color.CYAN); //setting the background
+        mainFrame = new JFrame(title); //Title of the Main Frame
+        mainFrame.setBackground(Color.BLACK);
 
+        //Template pane in the Main Frame
+        JPanel templatePane = new JPanel();
+        templatePane.setLayout(new GridLayout(5,1));
+        templatePane.setBackground(Color.CYAN);
+        templateOneBtn = new JButton("Template One");
+        templateOneBtn.addActionListener(this);
+        templatePane.add(templateOneBtn);
+
+        //Logo Pane in Main Frame
+        JPanel logoPane = new JPanel();
+        logoPane.setBackground(Color.BLACK);
+        ImageIcon imLogo = new ImageIcon(getClass().getResource("MEMGEN_icon.png")); //icon with the image
+        JLabel logoLbl = new JLabel(imLogo); //Label for the icon
+        logoPane.add(logoLbl);
+
+        //Info Pane in Main Frame
+        JPanel infoPane = new JPanel();
+        infoPane.setBackground(Color.BLACK);
+        JLabel infoTitle = new JLabel("Information");
+        infoPane.add(infoTitle);
+
+
+        //Adding panels to the main Frame
+        mainFrame.add(logoPane);
+        mainFrame.add(templatePane);
+        mainFrame.add(infoPane);
+
+        //MAIN Frame Specification
+        mainFrame.setLayout(new GridLayout(1,3)); //Frame
+        mainFrame.setBounds(20,20,1300,700);
+        mainFrame.setResizable(true);
+        mainFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        mainFrame.setVisible(true);
+
+
+
+
+        //TEMPLATE ONE
+        templateOne = new JFrame(title + String.valueOf(userFile));
 
         //Top Pane or NORTH PANE
         JPanel topPanel = new JPanel();//top panel or LoGO panel
-        ImageIcon imLogo = new ImageIcon(getClass().getResource("MEMGEN_icon.png")); //icon with the image
-        JLabel logoLbl = new JLabel(imLogo); //Label for the icon
+        imLogo = new ImageIcon(getClass().getResource("MEMGEN_icon.png"));
+        logoLbl = new JLabel(imLogo);
         topPanel.add(logoLbl);//adding the label to the Top panel
         topPanel.setBackground(Color.BLACK);//BG of Top Panel
-        mainFrame.add(topPanel);// Adding top panel to Main Frame
+        templateOne.add(topPanel);// Adding top panel to Main Frame
 
         //BTM Pane or NORTH PANE
         JPanel btmPanel = new JPanel();//footer panel on the bottom of the Main frame
         JLabel footerLbl = new JLabel("FOOTER LABEL"); //Identification of the Frame
         btmPanel.add(footerLbl); //adding the lbl to the pane
-        mainFrame.add(btmPanel);//adding the pane to the main frame
+        templateOne.add(btmPanel);//adding the pane to the main frame
 
         //WEST- EDIT SIDE BAR
         JPanel westPanel = new JPanel(); //The West EDit panel
-        westPanel.setBackground(Color.BLACK);//seting the Background of the editing panel
+        westPanel.setBackground(Color.BLACK);//setting the Background of the editing panel
         westPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); //Empty border for margin
-        westPanel.setLayout(new GridLayout(10,1,2,2)); //grid layout for a better view
+        westPanel.setLayout(new GridLayout(12,1,2,2)); //grid layout for a better view
 
         //Editing Panel Identification Label
         JLabel westLbl = new JLabel("Editing panel"); //label to identify panel
@@ -82,6 +140,9 @@ public class MyFrame extends JFrame implements ActionListener {
 
         JLabel inputdesLbl = new JLabel("Custom Text");
         inputdesLbl.setForeground(Color.MAGENTA);
+
+        JLabel bgDesLbl = new JLabel("Background Color");
+        bgDesLbl.setForeground(Color.MAGENTA);
 
         JLabel savedesLbl = new JLabel("Save Your Image ");
         savedesLbl.setForeground(Color.MAGENTA);
@@ -111,12 +172,42 @@ public class MyFrame extends JFrame implements ActionListener {
                 colorSwatch.add(fontGreenBtn);
                 colorSwatch.add(fontCyanBtn);
 
+
+
         addImgBtn = new JButton("SELECT IMAGE"); //Button to upload user image
         addImgBtn.addActionListener(this);// adds the object name to the action listener so a file choose pops up
+
         saveImgBtn = new JButton("SAVE IMAGE"); //Button to upload user image
         saveImgBtn.addActionListener(this);
+
         userInput = new JTextField(1); //setting max column
         userInput.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        //Background SWATCH PANEL
+        JPanel BColorSwatch = new JPanel();
+        BColorSwatch.setLayout(new GridLayout(1,5));
+        //RED FONT BTN
+        bgRedBtn = new JButton();
+        bgRedBtn.setBackground(Color.RED);
+        bgRedBtn.addActionListener(this);
+        //Blue Font Btn
+        bgBlueBtn = new JButton();
+        bgBlueBtn.setBackground(Color.BLUE);
+        bgBlueBtn.addActionListener(this);
+        //Green Font Btn
+        bgGreenBtn = new JButton();
+        bgGreenBtn.setBackground(Color.GREEN);
+        bgGreenBtn.addActionListener(this);
+        //CYAN Font Btn
+        bgCyanBtn = new JButton();
+        bgCyanBtn.setBackground(Color.CYAN);
+        bgCyanBtn.addActionListener(this);
+        //Adding Buttons to the BG Swatch Panel
+        BColorSwatch.add(bgCyanBtn);
+        BColorSwatch.add(bgGreenBtn);
+        BColorSwatch.add(bgBlueBtn);
+        BColorSwatch.add(bgRedBtn);
+
 
         //Adding Labels and other components to Editing Panel
         westPanel.add(westLbl);
@@ -126,6 +217,8 @@ public class MyFrame extends JFrame implements ActionListener {
         westPanel.add(colorSwatch);
         westPanel.add(inputdesLbl);
         westPanel.add(userInput);
+        westPanel.add(bgDesLbl);
+        westPanel.add(BColorSwatch);
         westPanel.add(savedesLbl);
         westPanel.add(saveImgBtn);
         //END OF EDIT PANEL
@@ -133,8 +226,9 @@ public class MyFrame extends JFrame implements ActionListener {
         //CENTER PANEL
         centerPanel = new JPanel();
         centerPanel.setBorder(BorderFactory.createLineBorder(Color.black));
-        centerPanel.setBackground(Color.BLACK);
-        userInputLbl = new JLabel();
+        //centerPanel.setBackground(Color.BLACK);
+        userInputLbl = new JLabel("Type Somthing Here..");
+        userInputLbl.setOpaque(true);
         userInputLbl.setHorizontalAlignment(SwingConstants.CENTER);
         userInputLbl.setFont(new Font("Serif", Font.PLAIN, 40));
         userInputLbl.setBackground(Color.BLACK);
@@ -152,20 +246,18 @@ public class MyFrame extends JFrame implements ActionListener {
 
 
 
-        //MAIN FRAME SPECIFICATIONS
-        mainFrame.setLayout(new BorderLayout(10,10)); //Frame
-        mainFrame.setBounds(20,20,1300,700);
-        mainFrame.setResizable(true);
+        //TEMP One FRAME SPECIFICATIONS
+        //templateOne.setLayout(new BorderLayout(10,10)); //Frame
+        templateOne.setBounds(20,20,1300,700);
+        templateOne.setResizable(true);
 
-        //ADDING PANELS
-        mainFrame.add(topPanel, BorderLayout.NORTH);//TOP PANEL BORDER LAYOUT NORTH
-        mainFrame.add(btmPanel, BorderLayout.SOUTH);//BOTTOM PANEL BORDER LAYOUT SOUTH
-        mainFrame.add(westPanel, BorderLayout.WEST);//WEST PANEL BORDER LAYOUT WEST
-        mainFrame.add(centerPanel, BorderLayout.CENTER);//CENTER PANEL BORDER LAYOUT CENTER
+        //ADDING PANELS to TEMPLAPTE ONE
+        templateOne.add(topPanel, BorderLayout.NORTH);//TOP PANEL BORDER LAYOUT NORTH
+        templateOne.add(btmPanel, BorderLayout.SOUTH);//BOTTOM PANEL BORDER LAYOUT SOUTH
+        templateOne.add(westPanel, BorderLayout.WEST);//WEST PANEL BORDER LAYOUT WEST
+        templateOne.add(centerPanel, BorderLayout.CENTER);//CENTER PANEL BORDER LAYOUT CENTER
+        templateOne.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-
-        mainFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        mainFrame.setVisible(true);
     }
 
     @Override
@@ -178,7 +270,15 @@ public class MyFrame extends JFrame implements ActionListener {
             userFile =file.getSelectedFile().getPath();
             if(userFile != ""){
 
-                memIco = new ImageIcon(new ImageIcon(userFile).getImage().getScaledInstance(centerPanel.getWidth(), centerPanel.getHeight()-50, Image.SCALE_DEFAULT));//new ImageIcon();
+                //memIco = new ImageIcon(new ImageIcon(userFile).getImage().getScaledInstance(centerPanel.getWidth(), centerPanel.getHeight()-50, Image.SCALE_FAST));//new ImageIcon();
+                try {
+                    BufferedImage bimg = ImageIO.read(new File(userFile));
+                    memIco = new ImageIcon(bimg);
+                    System.out.println(bimg.getHeight());
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+
                 memIme.setIcon(memIco);
                 centerPanel.updateUI();
             }else{
@@ -190,7 +290,12 @@ public class MyFrame extends JFrame implements ActionListener {
             userInputLbl.setText(userInput.getText());
             centerPanel.updateUI();
 
-        }else if(e.getSource() == fontBlueBtn){
+        }else if(e.getSource() == templateOneBtn){
+
+            mainFrame.setVisible(false);
+            templateOne.setVisible(true);
+        }
+        else if(e.getSource() == fontBlueBtn){
             userInputLbl.setForeground(Color.BLUE);
             userInputLbl.setText(userInput.getText());
             centerPanel.updateUI();
@@ -210,21 +315,29 @@ public class MyFrame extends JFrame implements ActionListener {
             userInputLbl.setText(userInput.getText());
             centerPanel.updateUI();
 
+        }else if(e.getSource() == bgCyanBtn){
+
+            userInputLbl.setBackground(Color.CYAN);
+            userInputLbl.repaint();
+
+        }else if(e.getSource() == bgBlueBtn){
+
+            userInputLbl.setBackground(Color.BLUE);
+            userInputLbl.repaint();
+
+        }else if(e.getSource() == bgRedBtn){
+
+            userInputLbl.setBackground(Color.RED);
+            userInputLbl.repaint();
+
+        }else if(e.getSource() == bgGreenBtn){
+
+            userInputLbl.setBackground(Color.GREEN);
+            userInputLbl.repaint();
+
         }else if(e.getSource() == saveImgBtn){
-            /***
-                int center = userInputLbl.getWidth()/2;
-                int charC = userInput.getText().length()/2;
-                int space = center-charC;
-                String text = userInput.getText();
-                for (int x = space; x >=1 ;x--){
-                    String y = " "+text;
-                    text = y;
-                    System.out.println(y);
-                }
-                    ***/
 
             userInputLbl.setText(userInput.getText());
-            userInputLbl.setOpaque(true);
             centerPanel.updateUI();
 
             Dimension d = centerPanel.getSize();
