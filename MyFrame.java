@@ -1,5 +1,6 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -9,25 +10,23 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Objects;
+
 
 
 public class MyFrame extends JFrame implements ActionListener {
 
     //Frames
-    private  JFrame mainFrame;
-    private JFrame templateOne;
+    private  JFrame mainFrame, templateOne;
 
     private String title = "Ekha- MEMGEN V.0.00.01";
 
     public ImageIcon imLogo;
     public JLabel logoLbl ;
 
-    private JButton templateOneBtn;
-    private  JButton templateTwoBtn;
+    private JButton templateOneBtn, templateTwoBtn, addImgBtn, sveBtn, resetBtn;
 
-    private final JButton addImgBtn; //Image ADD Button
     private final JPanel centerPanel; //Center Panel
+
     private JLabel memIme; //JLabel Center Image
     private ImageIcon memIco;//Image icon //the Meme Image
     private String userFile; //custom File path details from the user to load the image
@@ -35,29 +34,26 @@ public class MyFrame extends JFrame implements ActionListener {
     private JTextField userInput;//User Input field declaration
     private int  counter = 1; //Counter for
 
-    private JButton sveBtn;
-    private JButton resetBtn;
 
     //Font Swatch BUTTONS
-    private JButton fontRedBtn; //Red Btn
-    private  JButton fontBlueBtn; //Blue Btn
-    private  JButton fontGreenBtn;//Green Btn
-    private  JButton fontCyanBtn;//Cyan Btn
+    private JButton fontRedBtn,fontBlueBtn,fontGreenBtn,fontCyanBtn  ; //Red Btn
 
     //BG Swatch BUTTONS
-    private JButton bgRedBtn; //Red Btn
-    private  JButton bgBlueBtn; //Blue Btn
-    private  JButton bgGreenBtn;//Green Btn
-    private  JButton bgCyanBtn;//Cyan Btn
+    private JButton bgRedBtn,bgCyanBtn, bgBlueBtn, bgGreenBtn ; //Red Btn
 
-    private JSlider fontSize;
+    private JSlider fontSize ,imgSize;
     private Font customFont = new Font("Serif", Font.PLAIN, 50);
 
-    //Save Button
-    private JButton saveImgBtn;//Saves the Image and other function on btn click event
+    //Top Panel Button
+    private JButton homeBtn, saveImgBtn;
 
     private int fontSizeVal = 40;
     public Color blk = Color.BLACK;
+
+    private int orgImgWidth, orgImgHeight ;
+
+    //private JMenu menu;
+    //private JMenuItem openItem,newItem;
 
     /***
      *
@@ -69,45 +65,91 @@ public class MyFrame extends JFrame implements ActionListener {
      */
 
     public MyFrame(){
+
+        menu = new JMenu("Menu ");
+        openItem = new JMenuItem("Open");
+        newItem = new JMenuItem("Create New");
+
+        menu.add(openItem,newItem);
+
+
+
         //MAIN FRAME
         mainFrame = new JFrame(title); //Title of the Main Frame
         mainFrame.setBackground(Color.BLACK);
 
         //Template pane in the Main Frame
         JPanel templatePane = new JPanel();
-        templatePane.setLayout(new GridLayout(5,1));
+        templatePane.setLayout(new GridLayout(1,1));
         templatePane.setBackground(Color.CYAN);
 
-        templateOneBtn = new JButton(" ");
-        ImageIcon tempOneImg = new ImageIcon((getClass().getResource("temp01.jpg")));
-        //Image tempOneImgScaled = (tempOneImg).getImage().getScaledInstance(templateOneBtn.getWidth(),templateOneBtn.getHeight(), Image.SCALE_FAST);
-        //tempOneImg = new ImageIcon(tempOneImgScaled);
-
-        templateOneBtn.setIcon(tempOneImg);
-        templateOneBtn.addActionListener(this);
+        templateOneBtn = new JButton( "Create New");
+        templateOneBtn.setFont(new Font("Ariel BOLD", Font.PLAIN, 65));
+        templateOneBtn.setForeground(Color.CYAN);
+        templateOneBtn.setBackground(Color.MAGENTA);
         templatePane.add(templateOneBtn);
 
-        templateTwoBtn = new JButton("Template Two");
-        templateTwoBtn.addActionListener(this);
-        templatePane.add(templateTwoBtn);
+
+        //tempOneImg = new ImageIcon(tempOneImgScaled);
+
+        //templateOneBtn.setIcon(tempOneImg);
+        ///ImageIcon x = new ImageIcon(tempOneImgScaled);
+        ///templateOneBtn.setIcon(x);
+        templateOneBtn.addActionListener(this);
+        templateOneBtn.updateUI();
+        //templatePane.add(templateOneBtn);
+
+        //templateTwoBtn = new JButton("Template Two");
+        //templateTwoBtn.addActionListener(this);
+        //templatePane.add(templateTwoBtn);
 
         //Logo Pane in Main Frame
         JPanel logoPane = new JPanel();
         logoPane.setBackground(Color.BLACK);
 
+
         ImageIcon imLogo = new ImageIcon(getClass().getResource("MEMGEN_icon.png")); //icon with the image
         JLabel logoLbl = new JLabel(imLogo); //Label for the icon
+        logoLbl.setVerticalAlignment(SwingConstants.CENTER);
         logoPane.add(logoLbl);
 
         //Info Pane in Main Frame
         JPanel infoPane = new JPanel();
-        infoPane.setBackground(Color.WHITE);
-        JLabel infoTitle = new JLabel("Information");
-        JLabel info1 = new JLabel("Details of the application..");
+        infoPane.setBorder(new EmptyBorder(30,30,30,30));
+        infoPane.setLayout(new GridLayout(12,1));
+        infoPane.setBackground(Color.CYAN);
+
+        JLabel info1, info2, info3, info4, info5, info6, info7,info8,info9,info10,info11;
+
+        JLabel infoTitle = new JLabel("Features available\n");
+        infoTitle.setVerticalAlignment(SwingConstants.CENTER);
+        infoTitle.setHorizontalAlignment(SwingConstants.CENTER);
+
+        info1 = new JLabel(" ");
+        info2 = new JLabel("1. Option to Load your custom image");
+        info3 = new JLabel("2. Set your preferred text option");
+        info4 = new JLabel("3. Enabled to change colors");
+        info5 = new JLabel("4. Different font size available");
+        info6 = new JLabel("5. Meme Background color options ");
+        info7 = new JLabel("6. Save your fav Meme to your device");
+        info8 = new JLabel("7. Does not overwrite file if the same file name \n is found on the dir");
+        info9 = new JLabel("8. Image Aspect Ratio while resizing");
+
+
 
 
         infoPane.add(infoTitle);
         infoPane.add(info1);
+        infoPane.add(info2);
+        infoPane.add(info3);
+        infoPane.add(info4);
+        infoPane.add(info5);
+        infoPane.add(info6);
+        infoPane.add(info7);
+        infoPane.add(info8);
+        infoPane.add(info9);
+
+        //mainFrame.add(menu);
 
         //Adding panels to the main Frame
         mainFrame.add(logoPane);
@@ -133,11 +175,12 @@ public class MyFrame extends JFrame implements ActionListener {
 
         //Buttons
         ImageIcon homeIco = new ImageIcon(getClass().getResource("homeImg.png"));
-        JButton homeBtn = new JButton(homeIco);
+        homeBtn = new JButton(homeIco);
         homeBtn.setToolTipText("Go Home");
         homeBtn.setBackground(blk);
         homeBtn.setBorderPainted(false);
         homeBtn.setSize(20,topPanel.getHeight());
+        homeBtn.addActionListener(this);
 
 
         ImageIcon saveIco = new ImageIcon(getClass().getResource("saveImg.png"));
@@ -174,6 +217,27 @@ public class MyFrame extends JFrame implements ActionListener {
 
         JLabel btndesLbl = new JLabel("Add your image");
         btndesLbl.setForeground(Color.MAGENTA);
+
+        //Image Scaler
+        JLabel imgSizeLbl = new JLabel("Set image size");
+        imgSizeLbl.setForeground(Color.MAGENTA);
+
+        imgSize = new JSlider(1,10);
+        imgSize.setMinorTickSpacing(1);
+        imgSize.setMajorTickSpacing(1);
+        imgSize.setPaintLabels(true);
+        imgSize.setBackground(Color.BLACK);
+        imgSize.setForeground(Color.CYAN);
+        imgSize.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                memIme.setVerticalAlignment(SwingConstants.CENTER);
+                memIme.setHorizontalAlignment(SwingConstants.CENTER);
+
+                testScale(imgSize.getValue());
+
+            }
+        });
 
         JLabel fontColordesLbl = new JLabel("Font color");
         fontColordesLbl.setForeground(Color.MAGENTA);
@@ -236,10 +300,10 @@ public class MyFrame extends JFrame implements ActionListener {
         saveImgBtn = new JButton("SAVE IMAGE"); //Button to upload user image
         saveImgBtn.addActionListener(this);
 
-        resetBtn = new JButton("Reeset");
+        resetBtn = new JButton("Reset");
         resetBtn.addActionListener(this);
 
-        userInput = new JTextField(1); //setting max column
+        userInput = new JTextField("Sample Text");
         userInput.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         //Background SWATCH PANEL
@@ -269,18 +333,28 @@ public class MyFrame extends JFrame implements ActionListener {
 
         //Adding Labels and other components to Editing Panel
         westPanel.add(westLbl);
+
         westPanel.add(btndesLbl);
         westPanel.add(addImgBtn); // adding the button to
+
+        westPanel.add(imgSizeLbl);
+        westPanel.add(imgSize);
+
         westPanel.add(fontColordesLbl);
         westPanel.add(colorSwatch);
+
         westPanel.add(fontSizeLbl);
         westPanel.add(fontSize);
+
         westPanel.add(inputdesLbl);
         westPanel.add(userInput);
+
         westPanel.add(bgDesLbl);
         westPanel.add(BColorSwatch);
+
         westPanel.add(savedesLbl);
         westPanel.add(saveImgBtn);
+
         westPanel.add(resetBtn);
         //END OF EDIT PANEL
 
@@ -296,12 +370,14 @@ public class MyFrame extends JFrame implements ActionListener {
         userInputLbl.setForeground(Color.CYAN);
 
         memIme = new JLabel(memIco);
+        memIme.setHorizontalAlignment(SwingConstants.CENTER);
+        memIme.setVerticalAlignment(SwingConstants.CENTER);
         memIme.setSize(centerPanel.getWidth(),centerPanel.getHeight());
         memIme.setMaximumSize(new Dimension(centerPanel.getWidth(), centerPanel.getHeight()));
 
         centerPanel.setLayout(new BorderLayout());
         centerPanel.add(userInputLbl,BorderLayout.SOUTH);
-        centerPanel.add(memIme,BorderLayout.NORTH);
+        centerPanel.add(memIme,BorderLayout.CENTER);
 
 
         //TEMP One FRAME SPECIFICATIONS
@@ -317,6 +393,57 @@ public class MyFrame extends JFrame implements ActionListener {
         templateOne.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
     }
+
+    //METHODS AND OTHERS
+
+    public void testScale(int v){
+        ImageIcon tempOneImg = new ImageIcon(userFile);
+        int sW = tempOneImg.getIconWidth();
+        int sH = tempOneImg.getIconHeight();
+
+
+        int val = tempOneImg.getIconWidth();
+
+        if(v == 1){
+            sW = orgImgWidth/10;
+            sH = orgImgHeight/10;
+        } else if(v == 2){
+            sW = orgImgWidth/9;
+            sH = orgImgHeight/9;
+        }else if(v == 3){
+            sW = orgImgWidth/8;
+            sH = orgImgHeight/8;
+        }else if(v == 4){
+            sW = orgImgWidth/7;
+            sH = orgImgHeight/7;
+        }else if(v == 5){
+            sW = orgImgWidth/6;
+            sH = orgImgHeight/6;
+        }else if(v == 6){
+            sW = orgImgWidth/5;
+            sH = orgImgHeight/5;
+        }else if(v == 7){
+            sW = orgImgWidth/4;
+            sH = orgImgHeight/4;
+        }else if(v == 8){
+            sW = orgImgWidth/3;
+            sH = orgImgHeight/3;
+        }else if(v == 9){
+            sW = orgImgWidth/2;
+            sH = orgImgHeight/2;
+        }else if(v == 10){
+            Image tempOneImgScaled = (tempOneImg).getImage().getScaledInstance(orgImgWidth,orgImgHeight,Image.SCALE_SMOOTH);
+        }else{
+            System.out.println("incorrect Image size");
+        }
+
+
+        Image tempOneImgScaled = (tempOneImg).getImage().getScaledInstance(sW,sH,Image.SCALE_SMOOTH);
+        ImageIcon  x = new ImageIcon(tempOneImgScaled);
+        memIme.setIcon(x);
+        centerPanel.updateUI();
+    }
+
 
     /***
      * Updates the user JLabel of user input
@@ -356,8 +483,9 @@ public class MyFrame extends JFrame implements ActionListener {
                 centerPanel.repaint();
                 break;
             case 'Z':
-                userInputLbl.setBackground(Color.WHITE);
-                centerPanel.setBackground(Color.BLACK);
+                userInput.setForeground(Color.CYAN);
+                userInputLbl.setBackground(blk);
+                centerPanel.setBackground(blk);
                 centerPanel.repaint();
                 break;
 
@@ -409,6 +537,7 @@ public class MyFrame extends JFrame implements ActionListener {
         file.setAcceptAllFileFilterUsed(false);
         file.showOpenDialog(null);
         userFile =file.getSelectedFile().getPath();
+
         return userFile;
     }
 
@@ -416,6 +545,7 @@ public class MyFrame extends JFrame implements ActionListener {
      * Reset Inputs and others on same frame
      */
     private void resetInputs(){
+        memIme.setIcon(null);
         userInputLbl.setText("Sample Text");
         memIme.setText("Load Image :( ");
         updateBgColor('Z');
@@ -432,10 +562,14 @@ public class MyFrame extends JFrame implements ActionListener {
             if(userFile != ""){
                 BufferedImage bimg = null;
 
+
                 //memIco = new ImageIcon(new ImageIcon(userFile).getImage().getScaledInstance(centerPanel.getWidth(), centerPanel.getHeight()-50, Image.SCALE_FAST));//new ImageIcon();
                 try {
                     bimg = ImageIO.read(new File(userFile));
                     memIco = new ImageIcon(bimg);
+                    orgImgWidth = memIco.getIconWidth();
+                    orgImgHeight = memIco.getIconHeight();
+
                 } catch (IOException ex) {
                     ex.printStackTrace();
                  }
@@ -497,5 +631,9 @@ public class MyFrame extends JFrame implements ActionListener {
             twoFrame.setVisible(true);
         } else if(e.getSource() == resetBtn){
             resetInputs();
+        }else if(e.getSource() == homeBtn){
+
+            templateOne.setVisible(false);
+            mainFrame.setVisible(true);
         }
 }}
