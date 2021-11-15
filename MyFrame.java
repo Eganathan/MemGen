@@ -10,7 +10,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-
+import java.net.URL;
 
 
 public class MyFrame extends JFrame implements ActionListener {
@@ -34,7 +34,6 @@ public class MyFrame extends JFrame implements ActionListener {
     private JTextField userInput;//User Input field declaration
     private int  counter = 1; //Counter for
 
-
     //Font Swatch BUTTONS
     private JButton fontRedBtn,fontBlueBtn,fontGreenBtn,fontCyanBtn  ; //Red Btn
 
@@ -52,8 +51,8 @@ public class MyFrame extends JFrame implements ActionListener {
 
     private int orgImgWidth, orgImgHeight ;
 
-    //private JMenu menu;
-    //private JMenuItem openItem,newItem;
+    private JMenu menu , imgMenu;
+    private JMenuItem newItem, currFolderItem, exitItem,saveItem, loadImgItem;
 
     /***
      *
@@ -66,13 +65,32 @@ public class MyFrame extends JFrame implements ActionListener {
 
     public MyFrame(){
 
-        menu = new JMenu("Menu ");
-        openItem = new JMenuItem("Open");
-        newItem = new JMenuItem("Create New");
+        JMenuBar mbar = new JMenuBar();
 
-        menu.add(openItem,newItem);
+        menu = new JMenu("File ");
+        newItem = new JMenuItem("new file");
+        saveItem = new JMenuItem("Save");
+        currFolderItem = new JMenuItem("Current Dir");
+        exitItem = new JMenuItem("EXIT");
+
+        saveItem.addActionListener(this);
+        newItem.addActionListener(this);
+        currFolderItem.addActionListener(this);
+        exitItem.addActionListener(this);
 
 
+        menu.add(newItem);
+        menu.add(saveItem);
+        menu.add(currFolderItem);
+        menu.add(exitItem);
+
+        imgMenu = new JMenu("Image");
+        loadImgItem = new JMenuItem("Load image");
+        loadImgItem.addActionListener(this);
+        imgMenu.add(loadImgItem);
+
+        mbar.add(menu);
+        mbar.add(imgMenu);
 
         //MAIN FRAME
         mainFrame = new JFrame(title); //Title of the Main Frame
@@ -85,6 +103,7 @@ public class MyFrame extends JFrame implements ActionListener {
 
         templateOneBtn = new JButton( "Create New");
         templateOneBtn.setFont(new Font("Ariel BOLD", Font.PLAIN, 65));
+        templateOneBtn.setFocusPainted(false);
         templateOneBtn.setForeground(Color.CYAN);
         templateOneBtn.setBackground(Color.MAGENTA);
         templatePane.add(templateOneBtn);
@@ -108,7 +127,7 @@ public class MyFrame extends JFrame implements ActionListener {
         logoPane.setBackground(Color.BLACK);
 
 
-        ImageIcon imLogo = new ImageIcon(getClass().getResource("MEMGEN_icon.png")); //icon with the image
+        ImageIcon imLogo = new ImageIcon(getClass().getResource("MEMGENFlash.png")); //icon with the image
         JLabel logoLbl = new JLabel(imLogo); //Label for the icon
         logoLbl.setVerticalAlignment(SwingConstants.CENTER);
         logoPane.add(logoLbl);
@@ -136,8 +155,6 @@ public class MyFrame extends JFrame implements ActionListener {
         info9 = new JLabel("8. Image Aspect Ratio while resizing");
 
 
-
-
         infoPane.add(infoTitle);
         infoPane.add(info1);
         infoPane.add(info2);
@@ -148,8 +165,6 @@ public class MyFrame extends JFrame implements ActionListener {
         infoPane.add(info7);
         infoPane.add(info8);
         infoPane.add(info9);
-
-        //mainFrame.add(menu);
 
         //Adding panels to the main Frame
         mainFrame.add(logoPane);
@@ -165,6 +180,8 @@ public class MyFrame extends JFrame implements ActionListener {
 
         //TEMPLATE ONE
         templateOne = new JFrame(title + String.valueOf(userFile));
+        ImageIcon icon = new ImageIcon(getClass().getResource("MGicon.png"));
+        templateOne.setIconImage(icon.getImage());
 
         //Top Pane or NORTH PANE
         JPanel topPanel = new JPanel();//top panel or LoGO panel
@@ -199,7 +216,8 @@ public class MyFrame extends JFrame implements ActionListener {
 
         //BTM Pane or NORTH PANE
         JPanel btmPanel = new JPanel();//footer panel on the bottom of the Main frame
-        JLabel footerLbl = new JLabel("FOOTER LABEL"); //Identification of the Frame
+        btmPanel.setBackground(blk);
+        JLabel footerLbl = new JLabel("***"); //Identification of the Frame
         btmPanel.add(footerLbl); //adding the lbl to the pane
         templateOne.add(btmPanel);//adding the pane to the main frame
 
@@ -235,7 +253,6 @@ public class MyFrame extends JFrame implements ActionListener {
                 memIme.setHorizontalAlignment(SwingConstants.CENTER);
 
                 testScale(imgSize.getValue());
-
             }
         });
 
@@ -386,6 +403,7 @@ public class MyFrame extends JFrame implements ActionListener {
         templateOne.setResizable(true);
 
         //ADDING PANELS to TEMPLATE ONE
+        templateOne.setJMenuBar(mbar);
         templateOne.add(topPanel, BorderLayout.NORTH);//TOP PANEL BORDER LAYOUT NORTH
         templateOne.add(btmPanel, BorderLayout.SOUTH);//BOTTOM PANEL BORDER LAYOUT SOUTH
         templateOne.add(westPanel, BorderLayout.WEST);//WEST PANEL BORDER LAYOUT WEST
@@ -483,14 +501,12 @@ public class MyFrame extends JFrame implements ActionListener {
                 centerPanel.repaint();
                 break;
             case 'Z':
-                userInput.setForeground(Color.CYAN);
+                userInputLbl.setForeground(Color.CYAN);
                 userInputLbl.setBackground(blk);
                 centerPanel.setBackground(blk);
                 centerPanel.repaint();
                 break;
-
         }
-
     }
 
     /***
@@ -529,7 +545,6 @@ public class MyFrame extends JFrame implements ActionListener {
     /***
      * Load Image from computer and return file path
      */
-
     private String loadFile(){
         JFileChooser file = new JFileChooser("Desktop");
         file.setFileFilter(new FileNameExtensionFilter("PNG file", "png", "png"));
@@ -553,7 +568,7 @@ public class MyFrame extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == addImgBtn){
+        if(e.getSource() == addImgBtn || e.getSource() == loadImgItem){
             /***
              * Load Image Action
              */
@@ -621,7 +636,7 @@ public class MyFrame extends JFrame implements ActionListener {
             //Background Color to Green
             updateBgColor('G');
 
-        }else if(e.getSource() == saveImgBtn || e.getSource() == sveBtn ){
+        }else if(e.getSource() == saveImgBtn || e.getSource() == sveBtn || e.getSource() == saveItem){
 
             saveImg();
 
@@ -629,11 +644,24 @@ public class MyFrame extends JFrame implements ActionListener {
             mainFrame.setVisible(false);
             TemplateTwo twoFrame = new TemplateTwo();
             twoFrame.setVisible(true);
-        } else if(e.getSource() == resetBtn){
+        } else if(e.getSource() == resetBtn || e.getSource() == newItem){
             resetInputs();
         }else if(e.getSource() == homeBtn){
 
             templateOne.setVisible(false);
             mainFrame.setVisible(true);
+        }else if(e.getSource() == currFolderItem){
+
+            try {
+                URL location = MemGen.class.getProtectionDomain().getCodeSource().getLocation();
+                Process p = new ProcessBuilder("explorer.exe", "/select,"+userFile+"\\directory\\selectedFile").start();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+
+        }else if(e.getSource() == exitItem){
+            mainFrame.dispose();
+            templateOne.setVisible(false);
+            templateOne.dispose();
         }
 }}
