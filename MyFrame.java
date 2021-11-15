@@ -666,6 +666,7 @@ public class MyFrame extends JFrame implements ActionListener {
             }
 
         }else if(e.getSource() == exitItem){
+            //
             mainFrame.dispose();
             templateOne.setVisible(false);
             templateOne.dispose();
