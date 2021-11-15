@@ -166,6 +166,7 @@ public class MyFrame extends JFrame implements ActionListener {
         infoPane.add(info8);
         infoPane.add(info9);
 
+
         //Adding panels to the main Frame
         mainFrame.add(logoPane);
         mainFrame.add(templatePane);
@@ -177,13 +178,15 @@ public class MyFrame extends JFrame implements ActionListener {
         mainFrame.setResizable(true);
         mainFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         mainFrame.setVisible(true);
+        //END OF MAIN FRAME
 
-        //TEMPLATE ONE
+
+        //START OF TEMPLATE ONE
         templateOne = new JFrame(title + String.valueOf(userFile));
         ImageIcon icon = new ImageIcon(getClass().getResource("MGicon.png"));
         templateOne.setIconImage(icon.getImage());
 
-        //Top Pane or NORTH PANE
+        //START of TOP PANEL or NORTH PANE in Template One
         JPanel topPanel = new JPanel();//top panel or LoGO panel
         topPanel.setLayout(new BorderLayout());
 
@@ -213,15 +216,17 @@ public class MyFrame extends JFrame implements ActionListener {
 
         topPanel.setBackground(Color.BLACK);//BG of Top Panel
         templateOne.add(topPanel);// Adding top panel to Main Frame
+        //END OF TOP PANEL
 
-        //BTM Pane or NORTH PANE
+        //START OF BTM Pane or NORTH PANE
         JPanel btmPanel = new JPanel();//footer panel on the bottom of the Main frame
         btmPanel.setBackground(blk);
         JLabel footerLbl = new JLabel("***"); //Identification of the Frame
         btmPanel.add(footerLbl); //adding the lbl to the pane
         templateOne.add(btmPanel);//adding the pane to the main frame
+        //END OF BTM PANEL
 
-        //WEST- EDIT SIDE BAR
+        //START OF WEST- EDIT SIDE BAR
         JPanel westPanel = new JPanel(); //The West EDit panel
         westPanel.setBackground(Color.BLACK);//setting the Background of the editing panel
         westPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); //Empty border for margin
@@ -252,7 +257,7 @@ public class MyFrame extends JFrame implements ActionListener {
                 memIme.setVerticalAlignment(SwingConstants.CENTER);
                 memIme.setHorizontalAlignment(SwingConstants.CENTER);
 
-                testScale(imgSize.getValue());
+                imgScale(imgSize.getValue());
             }
         });
 
@@ -375,6 +380,7 @@ public class MyFrame extends JFrame implements ActionListener {
         westPanel.add(resetBtn);
         //END OF EDIT PANEL
 
+
         //CENTER PANEL
         centerPanel = new JPanel();
         centerPanel.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -395,7 +401,7 @@ public class MyFrame extends JFrame implements ActionListener {
         centerPanel.setLayout(new BorderLayout());
         centerPanel.add(userInputLbl,BorderLayout.SOUTH);
         centerPanel.add(memIme,BorderLayout.CENTER);
-
+        //END OF CENTER PANEL
 
         //TEMP One FRAME SPECIFICATIONS
         //templateOne.setLayout(new BorderLayout(10,10)); //Frame
@@ -414,7 +420,7 @@ public class MyFrame extends JFrame implements ActionListener {
 
     //METHODS AND OTHERS
 
-    public void testScale(int v){
+    public void imgScale(int v){
         ImageIcon tempOneImg = new ImageIcon(userFile);
         int sW = tempOneImg.getIconWidth();
         int sH = tempOneImg.getIconHeight();
