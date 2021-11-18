@@ -161,8 +161,10 @@ public class MyFrame extends JFrame implements ActionListener {
         info5 = new JLabel("4. Different font size available");
         info6 = new JLabel("5. Meme Background color options ");
         info7 = new JLabel("6. Save your fav Meme to your device");
-        info8 = new JLabel("7. Does not overwrite file if the same file name \n is found on the dir");
-        info9 = new JLabel("8. Image Aspect Ratio while resizing");
+        info8 = new JLabel("7. File name with current time stamp or your preferred name");
+        info9 = new JLabel("8. No compromise on Aspect Ratio while resizing Images");
+        info10 = new JLabel("9. Different fonts available");
+        info11 = new JLabel("10. more options on the way.");
 
 
         infoPane.add(infoTitle);
@@ -175,6 +177,8 @@ public class MyFrame extends JFrame implements ActionListener {
         infoPane.add(info7);
         infoPane.add(info8);
         infoPane.add(info9);
+        infoPane.add(info10);
+        infoPane.add(info11);
 
         //Adding panels to the main Frame
         mainFrame.add(logoPane);
@@ -231,6 +235,7 @@ public class MyFrame extends JFrame implements ActionListener {
 
         eastTopPNL.add(sveBtn);
         eastTopPNL.add(exitTopBtn);
+
 
         topPanel.add(homeBtn,BorderLayout.WEST);//adding the label to the Top panel
         topPanel.add(eastTopPNL,BorderLayout.EAST);//adding the label to the Top panel
@@ -609,7 +614,7 @@ public class MyFrame extends JFrame implements ActionListener {
             case 'Z':
                 userInputLbl.setForeground(Color.CYAN);
                 userInputLbl.setBackground(blk);
-                centerPanel.setBackground(blk);
+                centerPanel.setBackground(Color.lightGray);
                 centerPanel.repaint();
                 hasAltered('N');
                 break;
