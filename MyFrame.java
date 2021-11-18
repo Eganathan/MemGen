@@ -17,9 +17,10 @@ import java.util.Date;
 
 public class MyFrame extends JFrame implements ActionListener {
 
-    private final JButton exitTopBtn;
+    private  JButton exitTopBtn;
     //Frames
-    private  JFrame mainFrame, templateOne;
+    private  JFrame mainFrame;
+    private  JFrame templateOne;
 
     private String title = "Ekha- MEMGEN V.0.00.01";
 
@@ -54,6 +55,8 @@ public class MyFrame extends JFrame implements ActionListener {
 
     private JMenu menu , imgMenu,fontMenu,settingMenu,fontSizeM;
     private JMenuItem newItem, currFolderItem, exitItem,saveItem, loadImgItem;
+    private JMenuItem fontS10,fontS20,fontS30,fontS40,fontS50,fontS60,fontS70,fontS80,fontS90,fontS100;
+    private JMenuItem[] exp;
 
     private boolean isAltered = false;
 
@@ -99,7 +102,38 @@ public class MyFrame extends JFrame implements ActionListener {
         loadImgItem.addActionListener(this);
         imgMenu.add(loadImgItem);
 
+        //Font Menubar
         fontMenu = new JMenu("Font");
+
+        //font size sub menu
+        fontSizeM = new JMenu("Font Size");
+        fontS10 = new JMenuItem("10 pts");
+        fontS20 = new JMenuItem("20 pts");
+        fontS30 = new JMenuItem("30 pts");
+        fontS40 = new JMenuItem("40 pts");
+        fontS50 = new JMenuItem("50 pts");
+        fontS60 = new JMenuItem("60 pts");
+        fontS70 = new JMenuItem("70 pts");
+        fontS80 = new JMenuItem("80 pts");
+        fontS90 = new JMenuItem("90 pts");
+        fontS100 = new JMenuItem("100 pts");
+        fontSizeM.add(fontS10);
+        fontSizeM.add(fontS20);
+        fontSizeM.add(fontS30);
+        fontSizeM.add(fontS40);
+        fontSizeM.add(fontS50);
+        fontSizeM.add(fontS60);
+        fontSizeM.add(fontS70);
+        fontSizeM.add(fontS80);
+        fontSizeM.add(fontS90);
+        fontSizeM.add(fontS100);
+
+
+        JMenu fontFamM = new JMenu("Font-Family");
+
+        fontMenu.add(fontSizeM);
+        fontMenu.add(fontFamM);
+
 
 
         settingMenu = new JMenu("Setting");
@@ -108,7 +142,7 @@ public class MyFrame extends JFrame implements ActionListener {
 
         mbar.add(menu);
         mbar.add(imgMenu);
-        //mbar.add(fontMenu);
+        mbar.add(fontMenu);
         //mbar.add(settingMenu);
 
         //**START OF MAIN FRAME**
@@ -196,7 +230,7 @@ public class MyFrame extends JFrame implements ActionListener {
 
 
         //**START OF TEMPLATE ONE**
-        templateOne = new JFrame(title + String.valueOf(userFile));
+        templateOne = new JFrame(title);
         ImageIcon iconX = new ImageIcon(getClass().getResource("MGicon.png"));
         templateOne.setIconImage(iconX.getImage());
 
