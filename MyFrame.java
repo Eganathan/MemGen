@@ -52,7 +52,7 @@ public class MyFrame extends JFrame implements ActionListener {
 
     private int orgImgWidth, orgImgHeight ;
 
-    private JMenu menu , imgMenu,fontMenu,settingMenu;
+    private JMenu menu , imgMenu,fontMenu,settingMenu,fontSizeM;
     private JMenuItem newItem, currFolderItem, exitItem,saveItem, loadImgItem;
 
     private boolean isAltered = false;
@@ -101,14 +101,15 @@ public class MyFrame extends JFrame implements ActionListener {
 
         fontMenu = new JMenu("Font");
 
+
         settingMenu = new JMenu("Setting");
 
 
 
         mbar.add(menu);
         mbar.add(imgMenu);
-        mbar.add(fontMenu);
-        mbar.add(settingMenu);
+        //mbar.add(fontMenu);
+        //mbar.add(settingMenu);
 
         //**START OF MAIN FRAME**
         mainFrame = new JFrame(title); //Title of the Main Frame
