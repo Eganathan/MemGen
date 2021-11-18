@@ -17,6 +17,7 @@ import java.util.Date;
 
 public class MyFrame extends JFrame implements ActionListener {
 
+    private final JButton exitTopBtn;
     //Frames
     private  JFrame mainFrame, templateOne;
 
@@ -51,7 +52,7 @@ public class MyFrame extends JFrame implements ActionListener {
 
     private int orgImgWidth, orgImgHeight ;
 
-    private JMenu menu , imgMenu;
+    private JMenu menu , imgMenu,fontMenu,settingMenu;
     private JMenuItem newItem, currFolderItem, exitItem,saveItem, loadImgItem;
 
     private boolean isAltered = false;
@@ -98,12 +99,23 @@ public class MyFrame extends JFrame implements ActionListener {
         loadImgItem.addActionListener(this);
         imgMenu.add(loadImgItem);
 
+        fontMenu = new JMenu("Font");
+
+        settingMenu = new JMenu("Setting");
+
+
+
         mbar.add(menu);
         mbar.add(imgMenu);
+        mbar.add(fontMenu);
+        mbar.add(settingMenu);
 
         //**START OF MAIN FRAME**
         mainFrame = new JFrame(title); //Title of the Main Frame
         mainFrame.setBackground(Color.BLACK);
+
+        ImageIcon icon = new ImageIcon(getClass().getResource("MGicon.png"));
+        mainFrame.setIconImage(icon.getImage());
 
         //Template pane in the Main Frame
         JPanel templatePane = new JPanel();
@@ -180,8 +192,8 @@ public class MyFrame extends JFrame implements ActionListener {
 
         //**START OF TEMPLATE ONE**
         templateOne = new JFrame(title + String.valueOf(userFile));
-        ImageIcon icon = new ImageIcon(getClass().getResource("MGicon.png"));
-        templateOne.setIconImage(icon.getImage());
+        ImageIcon iconX = new ImageIcon(getClass().getResource("MGicon.png"));
+        templateOne.setIconImage(iconX.getImage());
 
         //START of TOP PANEL or NORTH PANE in Template One
         JPanel topPanel = new JPanel();//top panel or LoGO panel
@@ -199,6 +211,9 @@ public class MyFrame extends JFrame implements ActionListener {
         homeBtn.setSize(20,topPanel.getHeight());
         homeBtn.addActionListener(this);
 
+        //TOP EAST PANEL
+        JPanel eastTopPNL = new JPanel();
+        eastTopPNL.setLayout(new GridLayout(1,2));
 
         ImageIcon saveIco = new ImageIcon(getClass().getResource("saveImg.png"));
         sveBtn = new JButton(saveIco);
@@ -207,8 +222,18 @@ public class MyFrame extends JFrame implements ActionListener {
         sveBtn.setBorderPainted(false);
         sveBtn.addActionListener(this);
 
+        ImageIcon exitIco = new ImageIcon(getClass().getResource("exitImg.png"));
+        exitTopBtn = new JButton(exitIco);
+        exitTopBtn.setToolTipText("Exit Application");
+        exitTopBtn.setBackground(blk);
+        exitTopBtn.setBorderPainted(false);
+        exitTopBtn.addActionListener(this);
+
+        eastTopPNL.add(sveBtn);
+        eastTopPNL.add(exitTopBtn);
+
         topPanel.add(homeBtn,BorderLayout.WEST);//adding the label to the Top panel
-        topPanel.add(sveBtn,BorderLayout.EAST);//adding the label to the Top panel
+        topPanel.add(eastTopPNL,BorderLayout.EAST);//adding the label to the Top panel
         topPanel.add(logoLbl,BorderLayout.CENTER);//adding the label to the Top panel
 
         topPanel.setBackground(Color.BLACK);//BG of Top Panel
@@ -647,6 +672,7 @@ public class MyFrame extends JFrame implements ActionListener {
         file.setAcceptAllFileFilterUsed(false);
         file.showOpenDialog(null);
         userFile =file.getSelectedFile().getPath();
+        templateOne.setTitle(title);
         hasAltered('S');
         return userFile;
     }
@@ -685,7 +711,8 @@ public class MyFrame extends JFrame implements ActionListener {
     }
 
     private void reCNFEXIT(){
-        int input = JOptionPane.showConfirmDialog(templateOne, "Would you like to save your hilarious meme ?");
+
+        int input = JOptionPane.showConfirmDialog(templateOne, "Would you like to save your file before exit ?");
 
         if(input == 0){
             saveImg();
@@ -801,7 +828,7 @@ public class MyFrame extends JFrame implements ActionListener {
                 ex.printStackTrace();
             }
 
-        }else if(e.getSource() == exitItem){
+        }else if(e.getSource() == exitItem || e.getSource() == exitTopBtn){
             reCNFEXIT();
         }
     }}
