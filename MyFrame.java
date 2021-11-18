@@ -11,6 +11,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Timestamp;
+import java.util.Date;
 
 
 public class MyFrame extends JFrame implements ActionListener {
@@ -40,8 +42,6 @@ public class MyFrame extends JFrame implements ActionListener {
     //BG Swatch BUTTONS
     private JButton bgRedBtn,bgCyanBtn, bgBlueBtn, bgGreenBtn ; //Red Btn
 
-    private JSlider fontSize ,imgSize;
-    private Font customFont = new Font("Serif", Font.PLAIN, 50);
 
     //Top Panel Button
     private JButton homeBtn, saveImgBtn;
@@ -53,6 +53,15 @@ public class MyFrame extends JFrame implements ActionListener {
 
     private JMenu menu , imgMenu;
     private JMenuItem newItem, currFolderItem, exitItem,saveItem, loadImgItem;
+
+    private boolean isAltered = false;
+
+    //USER FONT STYLE
+    private int userFontSize = 60;
+    private String userFontFamily = "Serif";
+    private int userFontStyle = Font.PLAIN;
+    private JSlider fontSize ,imgSize;
+    private Font customFont = new Font(userFontFamily,  userFontStyle, userFontSize);
 
     /***
      *
@@ -92,7 +101,7 @@ public class MyFrame extends JFrame implements ActionListener {
         mbar.add(menu);
         mbar.add(imgMenu);
 
-        //MAIN FRAME
+        //**START OF MAIN FRAME**
         mainFrame = new JFrame(title); //Title of the Main Frame
         mainFrame.setBackground(Color.BLACK);
 
@@ -106,21 +115,10 @@ public class MyFrame extends JFrame implements ActionListener {
         templateOneBtn.setFocusPainted(false);
         templateOneBtn.setForeground(Color.CYAN);
         templateOneBtn.setBackground(Color.MAGENTA);
+
         templatePane.add(templateOneBtn);
-
-
-        //tempOneImg = new ImageIcon(tempOneImgScaled);
-
-        //templateOneBtn.setIcon(tempOneImg);
-        ///ImageIcon x = new ImageIcon(tempOneImgScaled);
-        ///templateOneBtn.setIcon(x);
         templateOneBtn.addActionListener(this);
         templateOneBtn.updateUI();
-        //templatePane.add(templateOneBtn);
-
-        //templateTwoBtn = new JButton("Template Two");
-        //templateTwoBtn.addActionListener(this);
-        //templatePane.add(templateTwoBtn);
 
         //Logo Pane in Main Frame
         JPanel logoPane = new JPanel();
@@ -166,7 +164,6 @@ public class MyFrame extends JFrame implements ActionListener {
         infoPane.add(info8);
         infoPane.add(info9);
 
-
         //Adding panels to the main Frame
         mainFrame.add(logoPane);
         mainFrame.add(templatePane);
@@ -178,10 +175,10 @@ public class MyFrame extends JFrame implements ActionListener {
         mainFrame.setResizable(true);
         mainFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         mainFrame.setVisible(true);
-        //END OF MAIN FRAME
+        //**END OF MAIN FRAME**
 
 
-        //START OF TEMPLATE ONE
+        //**START OF TEMPLATE ONE**
         templateOne = new JFrame(title + String.valueOf(userFile));
         ImageIcon icon = new ImageIcon(getClass().getResource("MGicon.png"));
         templateOne.setIconImage(icon.getImage());
@@ -226,11 +223,11 @@ public class MyFrame extends JFrame implements ActionListener {
         templateOne.add(btmPanel);//adding the pane to the main frame
         //END OF BTM PANEL
 
-        //START OF WEST- EDIT SIDE BAR
+        //START OF WEST- EDIT SIDE BAR (EDITING PANEL)
         JPanel westPanel = new JPanel(); //The West EDit panel
         westPanel.setBackground(Color.BLACK);//setting the Background of the editing panel
-        westPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); //Empty border for margin
-        westPanel.setLayout(new GridLayout(16,1,2,2)); //grid layout for a better view
+        westPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 0, 10)); //Empty border for margin
+        westPanel.setLayout(new GridLayout(20,1,2,2)); //grid layout for a better view
 
         //Editing Panel Identification Label
         JLabel westLbl = new JLabel("Editing panel"); //label to identify panel
@@ -238,11 +235,12 @@ public class MyFrame extends JFrame implements ActionListener {
         westLbl.setFont(new Font("Serif", Font.BOLD, 20));
         westLbl.setForeground(Color.WHITE);
 
-        JLabel btndesLbl = new JLabel("Add your image");
+        //Load Image
+        JLabel btndesLbl = new JLabel("Load your image");
         btndesLbl.setForeground(Color.MAGENTA);
 
         //Image Scaler
-        JLabel imgSizeLbl = new JLabel("Set image size");
+        JLabel imgSizeLbl = new JLabel("Image size (10% - 100%)");
         imgSizeLbl.setForeground(Color.MAGENTA);
 
         imgSize = new JSlider(1,10);
@@ -261,12 +259,33 @@ public class MyFrame extends JFrame implements ActionListener {
             }
         });
 
-        JLabel fontColordesLbl = new JLabel("Font color");
-        fontColordesLbl.setForeground(Color.MAGENTA);
+        //*START OF Custom Text
+        //Labels for the custome text and the sub discription
+        JLabel inputdesLbl = new JLabel("Custom Text");
+        inputdesLbl.setForeground(Color.MAGENTA);
+        JLabel inputSubDesLbl = new JLabel("(Click ENTER to update text)");
+        inputSubDesLbl.setForeground(Color.pink);
+
+        //Font Family Drop down label and DropDown DD
+        JLabel fontFamilyLbl = new JLabel("Font-family :");
+        fontFamilyLbl.setForeground(Color.MAGENTA);
+        String[] familyOptions = {"Serif","Dialog", "Monospaced",  "SansSerif"};
+
+        JComboBox<String> userFFDD = new JComboBox<String>(familyOptions);
+        userFFDD.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(e.getSource() != ""){
+
+                    userFontFamily = userFFDD.getItemAt(userFFDD.getSelectedIndex());
+                    upDateText();
+
+                }
+            }
+        });
 
         JLabel fontSizeLbl = new JLabel("Font Size");
         fontSizeLbl.setForeground(Color.MAGENTA);
-
         fontSize = new JSlider(20,100);
         fontSize.setMinorTickSpacing(5);
         fontSize.setMajorTickSpacing(10);
@@ -276,59 +295,61 @@ public class MyFrame extends JFrame implements ActionListener {
         fontSize.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
-
-               customFont = new Font("Serif", Font.PLAIN, fontSize.getValue());
-               upDateText();
+                userFontSize = fontSize.getValue();
+                upDateText();
             }
         });
 
-        JLabel inputdesLbl = new JLabel("Custom Text");
-        inputdesLbl.setForeground(Color.MAGENTA);
+        JLabel fontColordesLbl = new JLabel("Font color");
+        fontColordesLbl.setForeground(Color.MAGENTA);
 
-        JLabel bgDesLbl = new JLabel("Background Color");
-        bgDesLbl.setForeground(Color.MAGENTA);
 
         JLabel savedesLbl = new JLabel("Save Your Image ");
         savedesLbl.setForeground(Color.MAGENTA);
 
         //FONT SWATCH PANEL
-            JPanel colorSwatch = new JPanel();
-            colorSwatch.setLayout(new GridLayout(1,5));
-                //RED FONT BTN
-                fontRedBtn = new JButton();
-                fontRedBtn.setBackground(Color.RED);
-                fontRedBtn.addActionListener(this);
-                //Blue Font Btn
-                fontBlueBtn = new JButton();
-                fontBlueBtn.setBackground(Color.BLUE);
-                fontBlueBtn.addActionListener(this);
-                //Green Font Btn
-                fontGreenBtn = new JButton();
-                fontGreenBtn.setBackground(Color.GREEN);
-                fontGreenBtn.addActionListener(this);
-                //CYAN Font Btn
-                fontCyanBtn = new JButton();
-                fontCyanBtn.setBackground(Color.CYAN);
-                fontCyanBtn.addActionListener(this);
-                //Adding Buttons to the FONT Swatch Panel
-                colorSwatch.add(fontRedBtn);
-                colorSwatch.add(fontBlueBtn);
-                colorSwatch.add(fontGreenBtn);
-                colorSwatch.add(fontCyanBtn);
+        JPanel colorSwatch = new JPanel();
+        colorSwatch.setLayout(new GridLayout(1,5));
+        //RED FONT BTN
+        fontRedBtn = new JButton();
+        fontRedBtn.setBackground(Color.RED);
+        fontRedBtn.addActionListener(this);
+        //Blue Font Btn
+        fontBlueBtn = new JButton();
+        fontBlueBtn.setBackground(Color.BLUE);
+        fontBlueBtn.addActionListener(this);
+        //Green Font Btn
+        fontGreenBtn = new JButton();
+        fontGreenBtn.setBackground(Color.GREEN);
+        fontGreenBtn.addActionListener(this);
+        //CYAN Font Btn
+        fontCyanBtn = new JButton();
+        fontCyanBtn.setBackground(Color.CYAN);
+        fontCyanBtn.addActionListener(this);
+        //Adding Buttons to the FONT Swatch Panel
+        colorSwatch.add(fontRedBtn);
+        colorSwatch.add(fontBlueBtn);
+        colorSwatch.add(fontGreenBtn);
+        colorSwatch.add(fontCyanBtn);
 
         addImgBtn = new JButton("SELECT IMAGE"); //Button to upload user image
         addImgBtn.addActionListener(this);// adds the object name to the action listener so a file choose pops up
 
-        saveImgBtn = new JButton("SAVE IMAGE"); //Button to upload user image
-        saveImgBtn.addActionListener(this);
-
-        resetBtn = new JButton("Reset");
-        resetBtn.addActionListener(this);
-
-        userInput = new JTextField("Sample Text");
-        userInput.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        userInput = new JTextField("Type something here ...");
+        userInput.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        userInput.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(e.getSource() != ""){
+                    upDateText();
+                }
+            }
+        });
 
         //Background SWATCH PANEL
+        JLabel bgDesLbl = new JLabel("Background Color");
+        bgDesLbl.setForeground(Color.MAGENTA);
+
         JPanel BColorSwatch = new JPanel();
         BColorSwatch.setLayout(new GridLayout(1,5));
         //RED FONT BTN
@@ -353,8 +374,18 @@ public class MyFrame extends JFrame implements ActionListener {
         BColorSwatch.add(bgBlueBtn);
         BColorSwatch.add(bgRedBtn);
 
+        saveImgBtn = new JButton("SAVE IMAGE"); //Button to upload user image
+        saveImgBtn.addActionListener(this);
+
+        resetBtn = new JButton("Reset");
+        resetBtn.addActionListener(this);
+
+
         //Adding Labels and other components to Editing Panel
         westPanel.add(westLbl);
+
+        westPanel.add(bgDesLbl);
+        westPanel.add(BColorSwatch);
 
         westPanel.add(btndesLbl);
         westPanel.add(addImgBtn); // adding the button to
@@ -362,22 +393,27 @@ public class MyFrame extends JFrame implements ActionListener {
         westPanel.add(imgSizeLbl);
         westPanel.add(imgSize);
 
-        westPanel.add(fontColordesLbl);
-        westPanel.add(colorSwatch);
+        westPanel.add(inputdesLbl);
+        westPanel.add(userInput);
+        westPanel.add(inputSubDesLbl);
+
+        westPanel.add(fontFamilyLbl);
+        westPanel.add(userFFDD);
+
 
         westPanel.add(fontSizeLbl);
         westPanel.add(fontSize);
 
-        westPanel.add(inputdesLbl);
-        westPanel.add(userInput);
+        westPanel.add(fontColordesLbl);
+        westPanel.add(colorSwatch);
 
-        westPanel.add(bgDesLbl);
-        westPanel.add(BColorSwatch);
+
 
         westPanel.add(savedesLbl);
         westPanel.add(saveImgBtn);
 
         westPanel.add(resetBtn);
+
         //END OF EDIT PANEL
 
 
@@ -391,6 +427,7 @@ public class MyFrame extends JFrame implements ActionListener {
         userInputLbl.setFont(customFont);
         userInputLbl.setBackground(Color.BLACK);
         userInputLbl.setForeground(Color.CYAN);
+
 
         memIme = new JLabel(memIco);
         memIme.setHorizontalAlignment(SwingConstants.CENTER);
@@ -420,6 +457,35 @@ public class MyFrame extends JFrame implements ActionListener {
 
     //METHODS AND OTHERS
 
+    private void changeFontFamily(){
+        customFont = new Font(userFontFamily,  userFontStyle, userFontSize);
+    }
+
+
+
+    /***
+     * modifys if there has been any modification on the new file
+     * @param x holds if S == yes or N == no and sets the isAlterd var to appropriate boolean
+     * @returns the isAltered Var
+     */
+    public boolean hasAltered(char x){
+        if(x == 'S'){
+            isAltered = true;
+        }else if(x == 'N'){
+            isAltered = true;
+        }else{
+            System.out.println("invalid output");
+        }
+        return isAltered;
+    }
+
+    /***
+     * Image Scaleing or Resizing
+     * linked to the image imgSize Jslider
+     * gets the input 1-10 and reduces 1-10 part of the same orginal image width and height
+     * to keep the aspect ratio so the image does not look distorted
+     * @param v is input from JSlider 1-10
+     */
     public void imgScale(int v){
         ImageIcon tempOneImg = new ImageIcon(userFile);
         int sW = tempOneImg.getIconWidth();
@@ -428,33 +494,35 @@ public class MyFrame extends JFrame implements ActionListener {
 
         int val = tempOneImg.getIconWidth();
 
+
+
         if(v == 1){
-            sW = orgImgWidth/10;
-            sH = orgImgHeight/10;
+            sW = orgImgWidth-orgImgWidth/v;
+            sH = orgImgHeight-orgImgHeight/v;
         } else if(v == 2){
-            sW = orgImgWidth/9;
-            sH = orgImgHeight/9;
+            sW = orgImgWidth-orgImgWidth/v;
+            sH = orgImgHeight-orgImgHeight/v;
         }else if(v == 3){
-            sW = orgImgWidth/8;
-            sH = orgImgHeight/8;
+            sW = orgImgWidth-orgImgWidth/v;
+            sH = orgImgHeight-orgImgHeight/v;
         }else if(v == 4){
-            sW = orgImgWidth/7;
-            sH = orgImgHeight/7;
+            sW = orgImgWidth-orgImgWidth/v;
+            sH = orgImgHeight-orgImgHeight/v;
         }else if(v == 5){
-            sW = orgImgWidth/6;
-            sH = orgImgHeight/6;
+            sW = orgImgWidth-orgImgWidth/v;
+            sH = orgImgHeight-orgImgHeight/v;
         }else if(v == 6){
-            sW = orgImgWidth/5;
-            sH = orgImgHeight/5;
+            sW = orgImgWidth-orgImgWidth/v;
+            sH = orgImgHeight-orgImgHeight/v;
         }else if(v == 7){
-            sW = orgImgWidth/4;
-            sH = orgImgHeight/4;
+            sW = orgImgWidth-orgImgWidth/v;
+            sH = orgImgHeight-orgImgHeight/v;
         }else if(v == 8){
-            sW = orgImgWidth/3;
-            sH = orgImgHeight/3;
+            sW = orgImgWidth-orgImgWidth/v;
+            sH = orgImgHeight-orgImgHeight/v;
         }else if(v == 9){
-            sW = orgImgWidth/2;
-            sH = orgImgHeight/2;
+            sW = orgImgWidth-orgImgWidth/v;
+            sH = orgImgHeight-orgImgHeight/v;
         }else if(v == 10){
             Image tempOneImgScaled = (tempOneImg).getImage().getScaledInstance(orgImgWidth,orgImgHeight,Image.SCALE_SMOOTH);
         }else{
@@ -466,16 +534,22 @@ public class MyFrame extends JFrame implements ActionListener {
         ImageIcon  x = new ImageIcon(tempOneImgScaled);
         memIme.setIcon(x);
         centerPanel.updateUI();
+        hasAltered('S');
     }
 
 
     /***
      * Updates the user JLabel of user input
+     * gets the user input and sets it to the Label
+     * the function is being called from the action listner on user input as well as
+     * other btns(coler change,or others)
      */
     private void upDateText(){
+        customFont = customFont = new Font(userFontFamily,  userFontStyle, userFontSize);
         userInputLbl.setText(userInput.getText());
         userInputLbl.setFont(customFont);
         centerPanel.updateUI();
+        hasAltered('S');
     }
 
     /***
@@ -484,6 +558,7 @@ public class MyFrame extends JFrame implements ActionListener {
      */
     private void updateBgColor(char clr){
 
+        hasAltered('S');
         switch (clr){
 
             case 'G':
@@ -511,6 +586,7 @@ public class MyFrame extends JFrame implements ActionListener {
                 userInputLbl.setBackground(blk);
                 centerPanel.setBackground(blk);
                 centerPanel.repaint();
+                hasAltered('N');
                 break;
         }
     }
@@ -525,31 +601,44 @@ public class MyFrame extends JFrame implements ActionListener {
         Graphics2D g2d = image.createGraphics();
         centerPanel.print( g2d );
         g2d.dispose();
-        String fileNameGen = "MyMem_00"+String.valueOf(counter)+".jpg";
+
+        Date date = new Date();
+        Timestamp timeStampNow = new Timestamp(date.getTime());
+        String fileNameGen = "MyMem_00"+String.valueOf(counter)+String.valueOf(timeStampNow)+".jpg";
+
         File f = new File(fileNameGen);
         /***
          * Checks if the File Name exists
          * if yes then the counter gets increased and runs the method again
          * saves the image only when the file is not present with the same file to avoid overriding the image file
          */
-        if(!f.exists()){
+        JFileChooser fileChooser = new JFileChooser("home");
+        fileChooser.setDialogTitle("Save File As");
+        fileChooser.setAcceptAllFileFilterUsed(false);
+        fileChooser.setFileFilter(new FileNameExtensionFilter("PNG file", "png", "png"));
+        fileChooser.setFileFilter(new FileNameExtensionFilter("JPEG file", "jpg", "jpeg"));
+        fileChooser.setSelectedFile(f);
+        int option = fileChooser.showSaveDialog(templateOne);
 
+
+        if(option == JFileChooser.APPROVE_OPTION){
+            f = fileChooser.getSelectedFile();
             try {
                 ImageIO.write(image, "JPEG", f);
                 counter++;
                 JOptionPane.showMessageDialog(null, " Image saved successfully! ");
+                resetInputs();
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
-            resetInputs();
-        }else{
-            counter++;
-            saveImg();
+        } else{
+            JOptionPane.showMessageDialog(null, "Image not saved! ");
         }
     }
 
     /***
-     * Load Image from computer and return file path
+     * Load Image from computer and returns file path for
+     * adding it to the center panel
      */
     private String loadFile(){
         JFileChooser file = new JFileChooser("Desktop");
@@ -558,8 +647,14 @@ public class MyFrame extends JFrame implements ActionListener {
         file.setAcceptAllFileFilterUsed(false);
         file.showOpenDialog(null);
         userFile =file.getSelectedFile().getPath();
-
+        hasAltered('S');
         return userFile;
+    }
+
+    void toHome(){
+        templateOne.setVisible(false);
+        resetInputs();
+        mainFrame.setVisible(true);
     }
 
     /***
@@ -567,9 +662,42 @@ public class MyFrame extends JFrame implements ActionListener {
      */
     private void resetInputs(){
         memIme.setIcon(null);
-        userInputLbl.setText("Sample Text");
-        memIme.setText("Load Image :( ");
+        userInputLbl.setText("Type Something herer ...");
+        customFont = new Font(userFontFamily,  userFontStyle, userFontSize);
+        memIme.setText("");
         updateBgColor('Z');
+        hasAltered('N');
+    }
+
+    /***
+     * Reconfirm to Home
+     */
+    private void reCNF(){
+        int input = JOptionPane.showConfirmDialog(templateOne, "Would you like to save your hilirious mem ?");
+
+        if(input == 0){
+            saveImg();
+            toHome();
+
+        } else if(input == 1){
+            toHome();
+        }
+    }
+
+    private void reCNFEXIT(){
+        int input = JOptionPane.showConfirmDialog(templateOne, "Would you like to save your hilarious meme ?");
+
+        if(input == 0){
+            saveImg();
+            mainFrame.dispose();
+            templateOne.setVisible(false);
+            templateOne.dispose();
+
+        } else if(input == 1){
+            mainFrame.dispose();
+            templateOne.setVisible(false);
+            templateOne.dispose();
+        }
     }
 
     @Override
@@ -590,10 +718,11 @@ public class MyFrame extends JFrame implements ActionListener {
                     memIco = new ImageIcon(bimg);
                     orgImgWidth = memIco.getIconWidth();
                     orgImgHeight = memIco.getIconHeight();
+                    hasAltered('S');
 
                 } catch (IOException ex) {
                     ex.printStackTrace();
-                 }
+                }
 
                 memIme.setIcon(memIco);
                 centerPanel.updateUI();
@@ -645,17 +774,24 @@ public class MyFrame extends JFrame implements ActionListener {
         }else if(e.getSource() == saveImgBtn || e.getSource() == sveBtn || e.getSource() == saveItem){
 
             saveImg();
+            resetInputs();
 
         }else if(e.getSource() == templateTwoBtn){
             mainFrame.setVisible(false);
             TemplateTwo twoFrame = new TemplateTwo();
             twoFrame.setVisible(true);
         } else if(e.getSource() == resetBtn || e.getSource() == newItem){
+
             resetInputs();
         }else if(e.getSource() == homeBtn){
 
-            templateOne.setVisible(false);
-            mainFrame.setVisible(true);
+            if(isAltered){
+                reCNF();
+
+            }else{
+               toHome();
+            }
+            //END OF HOME BTN CODE
         }else if(e.getSource() == currFolderItem){
 
             try {
@@ -666,9 +802,6 @@ public class MyFrame extends JFrame implements ActionListener {
             }
 
         }else if(e.getSource() == exitItem){
-            //
-            mainFrame.dispose();
-            templateOne.setVisible(false);
-            templateOne.dispose();
+            reCNFEXIT();
         }
-}}
+    }}
