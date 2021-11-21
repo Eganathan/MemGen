@@ -53,10 +53,12 @@ public class MyFrame extends JFrame implements ActionListener {
 
     private int orgImgWidth, orgImgHeight ;
 
-    private JMenu menu , imgMenu,fontMenu,settingMenu,fontSizeM;
+    private JMenu menu , imgMenu,fontMenu,settingMenu,fontSizeM,fontStyleM;
     private JMenuItem newItem, currFolderItem, exitItem,saveItem, loadImgItem;
     private JMenuItem fontS10,fontS20,fontS30,fontS40,fontS50,fontS60,fontS70,fontS80,fontS90,fontS100;
-    private JMenuItem[] exp;
+    private JMenuItem fam1,fam2,fam3,fam4;
+    private JMenuItem fsB,fsI,fsP;
+    private JMenu FontFamM;
 
     private boolean isAltered = false;
 
@@ -66,6 +68,7 @@ public class MyFrame extends JFrame implements ActionListener {
     private int userFontStyle = Font.PLAIN;
     private JSlider fontSize ,imgSize;
     private Font customFont = new Font(userFontFamily,  userFontStyle, userFontSize);
+
 
     /***
      *
@@ -107,16 +110,27 @@ public class MyFrame extends JFrame implements ActionListener {
 
         //font size sub menu
         fontSizeM = new JMenu("Font Size");
-        fontS10 = new JMenuItem("10 pts");
-        fontS20 = new JMenuItem("20 pts");
-        fontS30 = new JMenuItem("30 pts");
-        fontS40 = new JMenuItem("40 pts");
-        fontS50 = new JMenuItem("50 pts");
-        fontS60 = new JMenuItem("60 pts");
-        fontS70 = new JMenuItem("70 pts");
-        fontS80 = new JMenuItem("80 pts");
-        fontS90 = new JMenuItem("90 pts");
-        fontS100 = new JMenuItem("100 pts");
+        fontS10 = new JMenuItem("10 pt");
+        fontS10.addActionListener(this);
+        fontS20 = new JMenuItem("20 pt");
+        fontS20.addActionListener(this);
+        fontS30 = new JMenuItem("30 pt");
+        fontS30.addActionListener(this);
+        fontS40 = new JMenuItem("40 pt");
+        fontS40.addActionListener(this);
+        fontS50 = new JMenuItem("50 pt");
+        fontS50.addActionListener(this);
+        fontS60 = new JMenuItem("60 pt");
+        fontS60.addActionListener(this);
+        fontS70 = new JMenuItem("70 pt");
+        fontS70.addActionListener(this);
+        fontS80 = new JMenuItem("80 pt");
+        fontS80.addActionListener(this);
+        fontS90 = new JMenuItem("90 pt");
+        fontS90.addActionListener(this);
+        fontS100 = new JMenuItem("100 pt");
+        fontS100.addActionListener(this);
+
         fontSizeM.add(fontS10);
         fontSizeM.add(fontS20);
         fontSizeM.add(fontS30);
@@ -129,16 +143,42 @@ public class MyFrame extends JFrame implements ActionListener {
         fontSizeM.add(fontS100);
 
 
-        JMenu fontFamM = new JMenu("Font-Family");
+        FontFamM= new JMenu("Font-Family");
 
+        fam1 = new JMenuItem("Serif");
+        fam1.addActionListener(this);
+        fam2 = new JMenuItem("mono");
+        fam2.addActionListener(this);
+        fam3 = new JMenuItem("SansSerif");
+        fam3.addActionListener(this);
+        fam4 = new JMenuItem("Dialog");
+        fam4.addActionListener(this);
+
+        FontFamM.add(fam1);
+        FontFamM.add(fam2);
+        FontFamM.add(fam3);
+        FontFamM.add(fam4);
+
+        fontStyleM = new JMenu("Font-Style");
+
+        fsB = new JMenuItem("Bold");
+        fsB.addActionListener(this);
+        fsI = new JMenuItem("Italic");
+        fsI.addActionListener(this);
+        fsP = new JMenuItem("Plain");
+        fsP.addActionListener(this);
+
+        fontStyleM.add(fsB);
+        fontStyleM.add(fsI);
+        fontStyleM.add(fsP);
+
+        fontMenu.add(fontStyleM);
         fontMenu.add(fontSizeM);
-        fontMenu.add(fontFamM);
+        fontMenu.add(FontFamM);
 
 
 
         settingMenu = new JMenu("Setting");
-
-
 
         mbar.add(menu);
         mbar.add(imgMenu);
@@ -617,6 +657,41 @@ public class MyFrame extends JFrame implements ActionListener {
         hasAltered('S');
     }
 
+    void setSizeFontMenu(int x){
+        userFontSize = x;
+        upDateText();
+    }
+
+    //Font Family
+    void changeStyle(String Y){
+
+                if (Y == "Serif"){
+                    userFontFamily = "Serif";
+                    upDateText();
+                }else if(Y== "Dialog"){
+                    userFontFamily ="Dialog";
+                    upDateText();
+                }else if(Y== "Monospaced"){
+                    userFontFamily ="Monospaced";
+                    upDateText();
+                }else if(Y== "SansSerif"){
+                    userFontFamily = "SansSerif";
+                    upDateText();
+                }
+    }
+
+    void BPIfontStyle(int z){
+        if(z == 1){
+            userFontStyle = Font.PLAIN;
+        }else if(z == 2){
+            userFontStyle = Font.BOLD;
+        }else if(z == 3){
+            userFontStyle = Font.ITALIC;
+        }
+
+        upDateText();
+    }
+
     /***
      * updates the Background Color
      * @param clr Color of Background
@@ -862,7 +937,7 @@ public class MyFrame extends JFrame implements ActionListener {
         }else if(e.getSource() == currFolderItem){
 
             try {
-                URL location = MemGen.class.getProtectionDomain().getCodeSource().getLocation();
+                URL location = MyFrame.class.getProtectionDomain().getCodeSource().getLocation();
                 Process p = new ProcessBuilder("explorer.exe", "/select,"+userFile+"\\directory\\selectedFile").start();
             } catch (IOException ex) {
                 ex.printStackTrace();
@@ -870,5 +945,39 @@ public class MyFrame extends JFrame implements ActionListener {
 
         }else if(e.getSource() == exitItem || e.getSource() == exitTopBtn){
             reCNFEXIT();
+        }else if(e.getSource() == fontS10){
+            setSizeFontMenu(10);
+        }else if(e.getSource() == fontS20){
+            setSizeFontMenu(20);
+        }else if(e.getSource() == fontS30){
+            setSizeFontMenu(30);
+        }else if(e.getSource() == fontS40){
+            setSizeFontMenu(40);
+        }else if(e.getSource() == fontS50){
+            setSizeFontMenu(50);
+        }else if(e.getSource() == fontS60){
+            setSizeFontMenu(60);
+        }else if(e.getSource() == fontS70){
+            setSizeFontMenu(70);
+        }else if(e.getSource() == fontS80){
+            setSizeFontMenu(80);
+        }else if(e.getSource() == fontS90){
+            setSizeFontMenu(90);
+        }else if(e.getSource() == fontS100){
+            setSizeFontMenu(100);
+        }else if(e.getSource() == fam1){
+            changeStyle("Serif");
+        }else if(e.getSource() == fam2){
+            changeStyle( "Monospaced");
+        }else if(e.getSource() == fam3){
+            changeStyle("SansSerif");
+        }else if(e.getSource() == fam4){
+            changeStyle("Dialog");
+        }else if(e.getSource() == fsB){
+            BPIfontStyle(2);
+        }else if(e.getSource() == fsI){
+            BPIfontStyle(3);
+        }else if(e.getSource() == fsP){
+            BPIfontStyle(1);
         }
     }}
