@@ -15,14 +15,14 @@ import java.sql.Timestamp;
 import java.util.Date;
 
 
-public class MyFrame extends JFrame implements ActionListener {
+   class MyFrame extends JFrame implements ActionListener {
 
     private  JButton exitTopBtn;
     //Frames
     private  JFrame mainFrame;
     private  JFrame templateOne;
 
-    private String title = "Ekha- MEMGEN V.0.00.01";
+    private String title = "Ekha- MEMGEN V.0.01";
 
     public ImageIcon imLogo;
     public JLabel logoLbl ;
@@ -744,7 +744,7 @@ public class MyFrame extends JFrame implements ActionListener {
 
         Date date = new Date();
         Timestamp timeStampNow = new Timestamp(date.getTime());
-        String fileNameGen = "MyMem_00"+String.valueOf(counter)+String.valueOf(timeStampNow)+".jpg";
+        String fileNameGen = "MyMem_00"+String.valueOf(counter)+".jpg";
 
         File f = new File(fileNameGen);
         /***
@@ -755,7 +755,6 @@ public class MyFrame extends JFrame implements ActionListener {
         JFileChooser fileChooser = new JFileChooser("home");
         fileChooser.setDialogTitle("Save File As");
         fileChooser.setAcceptAllFileFilterUsed(false);
-        fileChooser.setFileFilter(new FileNameExtensionFilter("PNG file", "png", "png"));
         fileChooser.setFileFilter(new FileNameExtensionFilter("JPEG file", "jpg", "jpeg"));
         fileChooser.setSelectedFile(f);
         int option = fileChooser.showSaveDialog(templateOne);
