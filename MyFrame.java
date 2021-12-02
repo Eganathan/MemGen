@@ -18,12 +18,13 @@ import java.util.Date;
    class MyFrame extends JFrame implements ActionListener {
 
     private  JButton exitTopBtn;
-    //Frames
+    
+      //Frames
     private  JFrame mainFrame;
     private  JFrame templateOne;
-
+//frame title 
     private String title = "Ekha- MEMGEN V.0.01";
-
+// image Icon var
     public ImageIcon imLogo;
     public JLabel logoLbl ;
 
@@ -48,6 +49,7 @@ import java.util.Date;
     //Top Panel Button
     private JButton homeBtn, saveImgBtn;
 
+      // default font size
     private int fontSizeVal = 40;
     public Color blk = Color.BLACK;
 
